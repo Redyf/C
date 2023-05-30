@@ -9,7 +9,7 @@
 #define MAX_NOME 31
 #define MAX_NOTA 6
 
-// Função para imprimir o registro
+// Função para imprimir o registro (em teste)
 // void imprimirRegistro(char matricula[MAX_MATRICULA], char nome[MAX_NOME],
 //                       char nota1[MAX_NOTA], char nota2[MAX_NOTA],
 //                       char nota3[MAX_NOTA]) {
@@ -40,6 +40,8 @@ void imprimirRegistro(const char matricula[MAX_MATRICULA],
     printf("\n");
 }
 
+// Utilizando ponteiro para direcionar o arquivo que será criado na hora de
+// execução, nessa função ele irá apenas imprimir o registro! Caso exista
 void imprimirRegistrosArquivo(const char *nomeArquivo) {
     FILE *arquivo = fopen(nomeArquivo, "rb");
     if (arquivo == NULL) {
@@ -53,6 +55,9 @@ void imprimirRegistrosArquivo(const char *nomeArquivo) {
     char nota2[MAX_NOTA];
     char nota3[MAX_NOTA];
 
+    // Passo as varíaveis para o loop, depois serão lidas individualmente. A
+    // matrícula está separada pois ao mencionar o número da matrícula do aluno,
+    // será imprimido na tela as informações abaixo. Então fechará o arquivo.
     while (fread(matricula, sizeof(char), MAX_MATRICULA, arquivo) ==
             MAX_MATRICULA) {
         fread(nome, sizeof(char), MAX_NOME, arquivo);
@@ -78,6 +83,7 @@ void inserirRegistro(FILE *arquivo) {
     char nota2[MAX_NOTA];
     char nota3[MAX_NOTA];
 
+    // Pede ao usuário para inserir as informações (matrícula, nome, nota1,2,3).
     printf("Digite a matrícula (até 5 caracteres): ");
     scanf("%s", matricula);
 
@@ -93,6 +99,8 @@ void inserirRegistro(FILE *arquivo) {
     printf("Digite sua terceira nota (até 5 caracteres): ");
     scanf("%5s", nota3);
 
+    // Escreve os valores das varíaveis e confere a quantidade de caracteres
+    // escritos e armazena no arquivo!
     fwrite(matricula, sizeof(char), MAX_MATRICULA, arquivo);
     fwrite(nome, sizeof(char), MAX_NOME, arquivo);
     fwrite(nota1, sizeof(char), MAX_NOTA, arquivo);
@@ -106,6 +114,8 @@ void inserirRegistro(FILE *arquivo) {
 
 // Função para apagar um registro do arquivo
 void apagarRegistro(FILE *arquivo, const char *matricula) {
+    // Cria um arquivo temporário chamado temp para armazenar as informações,
+    // seestiver vazio ele irá mostrar o texto abaixo!
     FILE *temp = fopen("temp.txt", "wb");
     if (temp == NULL) {
         printf("Erro ao criar o arquivo temporário.\n");
@@ -119,6 +129,10 @@ void apagarRegistro(FILE *arquivo, const char *matricula) {
     char regNota2[MAX_NOTA];
     char regNota3[MAX_NOTA];
 
+    // Mesmo loop usado na função inserirRegistro porém dessa vez ele lê e compara
+    // as strings com o strcmp (stringcompare). Dessa forma ele pode ver as
+    // matrículas já registradas e apaga-las se for pedido para executar tal ação.
+    // É necessário citar o número da matrícula que deseja excluir!
     while (fread(regMatricula, sizeof(char), MAX_MATRICULA, arquivo) ==
             MAX_MATRICULA) {
         fread(regNome, sizeof(char), MAX_NOME, arquivo);
@@ -153,6 +167,8 @@ int main() {
 
     int opcao;
     char matricula[MAX_MATRICULA];
+
+    // Oferece uma lista de opções para o usuário, a ação depende de sua escolha.
 
     printf("Selecione uma opção:\n");
     printf("1 - Imprimir registros\n");
