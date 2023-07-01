@@ -15,7 +15,7 @@
 #define MAX_CARGA_HORARIA 21
 
 // Disciplina
-#define MAX_SEMESTRE 6
+#define MAX_SEMESTRE 10
 #define MAX_PROFESSOR 31  // Pensar sobre essa variável
 #define MAX_DIADASEMANA 31
 
