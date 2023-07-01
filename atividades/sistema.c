@@ -8,7 +8,7 @@
 #define MAX_NOTA 6
 
 // Funcionarios
-#define MAX_ID 4
+#define MAX_ID 6
 // #define MAX_NOME 31
 #define MAX_CARGO 21
 #define MAX_DISCIPLINA 31
@@ -181,19 +181,19 @@ void inserirRegistroFuncionario(FILE *arquivo) {
     char carga_horaria[MAX_CARGA_HORARIA];
 
     // Pede ao usuário para inserir as informações (matrícula, nome, nota1,2,3).
-    printf("Digite a matrícula (até 3 caracteres): ");
+    printf("Digite seu ID (até 3 caracteres): ");
     scanf("%s", id);
 
     printf("Digite seu nome (até 30 caracteres): ");
     scanf("%s", nome);
 
-    printf("Digite sua primeira nota (até 5 caracteres): ");
+    printf("Digite seu cargo (até 5 caracteres): ");
     scanf("%5s", cargo);
 
-    printf("Digite sua segunda nota (até 5 caracteres): ");
+    printf("Digite sua disciplina (até 5 caracteres): ");
     scanf("%5s", disciplina);
 
-    printf("Digite sua terceira nota (até 5 caracteres): ");
+    printf("Digite sua carga horária (até 5 caracteres): ");
     scanf("%5s", carga_horaria);
 
     fwrite(id, sizeof(char), MAX_ID, arquivo);
@@ -216,13 +216,13 @@ void inserirRegistroDisciplina(FILE *arquivo) {
     char professor[MAX_PROFESSOR];
     char diadasemana[MAX_DIADASEMANA];
 
-    printf("Digite o seu semestre (até 3 caracteres): ");
+    printf("Digite o semestre (até 3 caracteres): ");
     scanf("%s", semestre);
 
     printf("Digite o nome do professor (até 30 caracteres): ");
     scanf("%s", professor);
 
-    printf("Digite o dia da semana (até 5 caracteres): ");
+    printf("Digite os dias da semana (até 5 caracteres): ");
     scanf("%5s", diadasemana);
 
     fwrite(semestre, sizeof(char), MAX_SEMESTRE, arquivo);
@@ -365,23 +365,62 @@ int main() {
     int opcao;
     char id[MAX_ID];
     char matricula[MAX_MATRICULA];
+    char semestre[MAX_SEMESTRE];
 
+    // Escolha a opção
     printf("Selecione uma opção:\n");
-    printf("1 - Imprimir registros\n");  // Perguntar se é para imprimir o registro do funcionário ou aluno.
-    printf("2 - Inserir registro\n"); // Perguntar se o usuário é um aluno ou professor, caso seja funcionário peça seu ID e cargo, caso aluno peça sua matrícula.
-    printf("3 - Apagar registro\n");
-    printf("4 - Sair\n");
+    // Imprimir
+    printf("1 - Imprimir registros do aluno\n");
+    printf("2 - Imprimir registros do funcionário\n");
+    printf("3 - Imprimir registros da disciplina\n");
+    // Inserir
+    printf("4 - Inserir registro do aluno\n");
+    printf("5 - Inserir registro do funcionário\n");
+    printf("6 - Inserir registro da disciplina\n");
+    // Apagar
+    printf("7 - Apagar registro do aluno\n");
+    printf("8 - Apagar registro do funcionário\n");
+    printf("9 - Apagar registro da disciplina\n");
+    // Sair
+    printf("10 - Sair\n");
     printf("Opção: ");
     scanf("%d", &opcao);
 
+    // Imprimir
     if (opcao == 1) {
         imprimirRegistrosArquivoAluno("dados.txt");
     } else if (opcao == 2) {
-        inserirRegistroAluno(arquivo);
+        imprimirRegistrosArquivoFuncionario("dados.txt");
     } else if (opcao == 3) {
+        imprimirRegistrosArquivoDisciplina("dados.txt");
+    }
+
+    // Inserir
+    else if (opcao == 4) {
+        inserirRegistroAluno(arquivo);
+    }
+    else if (opcao == 5) {
+        inserirRegistroFuncionario(arquivo);
+    }
+    else if (opcao == 6) {
+        inserirRegistroDisciplina(arquivo);
+    }
+
+    // Apagar
+    else if (opcao == 7) {
         printf("Digite a matrícula do registro a ser apagado: ");
         scanf("%5s", matricula);
         apagarRegistroAluno(arquivo, matricula);
+    }
+    else if (opcao == 8) {
+        printf("Digite o ID a ser apagado: ");
+        scanf("%5s", id);
+        apagarRegistroFuncionario(arquivo, id);
+    }
+    else if (opcao == 9) {
+        printf("Digite a disciplina a ser apagada: ");
+        scanf("%5s", semestre);
+        apagarRegistroDisciplina(arquivo, semestre);
     } else {
         printf("Opção inválida, encerrando processo...\n");
     }
