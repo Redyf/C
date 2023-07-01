@@ -9,15 +9,15 @@
 
 // Funcionarios
 #define MAX_ID 6
-// #define MAX_NOME 31
+#define MAX_NOME_FUNCIONARIO 31
 #define MAX_CARGO 21
 #define MAX_DISCIPLINA 31
 #define MAX_CARGA_HORARIA 21
 
 // Disciplina
-#define MAX_SEMESTRE 21
+#define MAX_SEMESTRE 6
 #define MAX_PROFESSOR 31  // Pensar sobre essa variável
-#define MAX_DIADASEMANA 21
+#define MAX_DIADASEMANA 31
 
 // Função para imprimir o registro TODO: criar função imprimirRegistroAluno (basicamente essa aqui) e imprimirRegistroFuncionario
 void imprimirRegistroAluno(const char matricula[MAX_MATRICULA],
@@ -32,7 +32,7 @@ void imprimirRegistroAluno(const char matricula[MAX_MATRICULA],
 }
 
 void imprimirRegistroFuncionario(const char id[MAX_ID],
-                                 const char nome[MAX_NOME], const char cargo[MAX_CARGO],
+                                 const char nome[MAX_NOME_FUNCIONARIO], const char cargo[MAX_CARGO],
                                  const char disciplina[MAX_DISCIPLINA], const char carga_horaria[MAX_CARGA_HORARIA]) {
     printf("ID: %s\n", id);
     printf("Nome: %s\n", nome);
@@ -54,9 +54,9 @@ void imprimirRegistroDisciplina(const char semestre[MAX_SEMESTRE],
 
 // Utilizando ponteiro para direcionar o arquivo que será criado na hora de
 // execução, nessa função ele irá apenas imprimir o registro! Caso exista
-void imprimirRegistrosArquivoAluno(const char *nomeArquivo) {
-    FILE *arquivo = fopen(nomeArquivo, "rb");
-    if (arquivo == NULL) {
+void imprimirRegistrosArquivoAluno(const char *nomeArquivoAluno) {
+    FILE *arquivoAluno = fopen(nomeArquivoAluno, "rb");
+    if (arquivoAluno == NULL) {
         printf("Erro ao abrir o arquivo.\n");
         return;
     }
@@ -70,47 +70,47 @@ void imprimirRegistrosArquivoAluno(const char *nomeArquivo) {
     // Passo as varíaveis para o loop, depois serão lidas individualmente. A
     // matrícula está separada pois ao mencionar o número da matrícula do aluno,
     // será imprimido na tela as informações abaixo. Então fechará o arquivo.
-    while (fread(matricula, sizeof(char), MAX_MATRICULA, arquivo) ==
+    while (fread(matricula, sizeof(char), MAX_MATRICULA, arquivoAluno) ==
             MAX_MATRICULA) {
-        fread(nome, sizeof(char), MAX_NOME, arquivo);
-        fread(nota1, sizeof(char), MAX_NOTA, arquivo);
-        fread(nota2, sizeof(char), MAX_NOTA, arquivo);
-        fread(nota3, sizeof(char), MAX_NOTA, arquivo);
+        fread(nome, sizeof(char), MAX_NOME, arquivoAluno);
+        fread(nota1, sizeof(char), MAX_NOTA, arquivoAluno);
+        fread(nota2, sizeof(char), MAX_NOTA, arquivoAluno);
+        fread(nota3, sizeof(char), MAX_NOTA, arquivoAluno);
 
         imprimirRegistroAluno(matricula, nome, nota1, nota2, nota3);
     }
 
-    fclose(arquivo);
+    fclose(arquivoAluno);
 }
 
-void imprimirRegistrosArquivoFuncionario(const char *nomeArquivo) {
-    FILE *arquivo = fopen(nomeArquivo, "rb");
-    if (arquivo == NULL) {
+void imprimirRegistrosArquivoFuncionario(const char *nomeArquivoFuncionario) {
+    FILE *arquivoFuncionario = fopen(nomeArquivoFuncionario, "rb");
+    if (arquivoFuncionario == NULL) {
         printf("Erro ao abrir o arquivo.\n");
         return;
     }
 
     char id[MAX_ID];
-    char nome[MAX_NOME];
+    char nome[MAX_NOME_FUNCIONARIO];
     char cargo[MAX_CARGO];
     char disciplina[MAX_DISCIPLINA];
     char carga_horaria[MAX_CARGA_HORARIA];
 
-    while (fread(id, sizeof(char), MAX_ID, arquivo) ==
+    while (fread(id, sizeof(char), MAX_ID, arquivoFuncionario) ==
             MAX_ID) {
-        fread(nome, sizeof(char), MAX_NOME, arquivo);
-        fread(cargo, sizeof(char), MAX_CARGO, arquivo);
-        fread(disciplina, sizeof(char), MAX_DISCIPLINA, arquivo);
-        fread(carga_horaria, sizeof(char), MAX_CARGA_HORARIA, arquivo);
+        fread(nome, sizeof(char), MAX_NOME_FUNCIONARIO, arquivoFuncionario);
+        fread(cargo, sizeof(char), MAX_CARGO, arquivoFuncionario);
+        fread(disciplina, sizeof(char), MAX_DISCIPLINA, arquivoFuncionario);
+        fread(carga_horaria, sizeof(char), MAX_CARGA_HORARIA, arquivoFuncionario);
         imprimirRegistroFuncionario(id, nome, cargo, disciplina, carga_horaria);
     }
 
-    fclose(arquivo);
+    fclose(arquivoFuncionario);
 }
 
-void imprimirRegistrosArquivoDisciplina(const char *nomeArquivo) {
-    FILE *arquivo = fopen(nomeArquivo, "rb");
-    if (arquivo == NULL) {
+void imprimirRegistrosArquivoDisciplina(const char *nomeArquivoDisciplina) {
+    FILE *arquivoDisciplina = fopen(nomeArquivoDisciplina, "rb");
+    if (arquivoDisciplina == NULL) {
         printf("Erro ao abrir o arquivo.\n");
         return;
     }
@@ -119,18 +119,18 @@ void imprimirRegistrosArquivoDisciplina(const char *nomeArquivo) {
     char professor[MAX_PROFESSOR];
     char diadasemana[MAX_DIADASEMANA];
 
-    while (fread(semestre, sizeof(char), MAX_SEMESTRE, arquivo) ==
-            MAX_ID) {
-        fread(professor, sizeof(char), MAX_NOME, arquivo);
-        fread(diadasemana, sizeof(char), MAX_CARGO, arquivo);
+    while (fread(semestre, sizeof(char), MAX_SEMESTRE, arquivoDisciplina) ==
+            MAX_SEMESTRE) {
+        fread(professor, sizeof(char), MAX_PROFESSOR, arquivoDisciplina);
+        fread(diadasemana, sizeof(char), MAX_DIADASEMANA, arquivoDisciplina);
         imprimirRegistroDisciplina(semestre, professor, diadasemana);
     }
 
-    fclose(arquivo);
+    fclose(arquivoDisciplina);
 }
 
-void inserirRegistroAluno(FILE *arquivo) {
-    if (arquivo == NULL) {
+void inserirRegistroAluno(FILE *arquivoAluno) {
+    if (arquivoAluno == NULL) {
         printf("Erro ao abrir o arquivo.\n");
         return;
     }
@@ -158,24 +158,24 @@ void inserirRegistroAluno(FILE *arquivo) {
 
     // Escreve os valores das varíaveis e confere a quantidade de caracteres
     // escritos e armazena no arquivo!
-    fwrite(matricula, sizeof(char), MAX_MATRICULA, arquivo);
-    fwrite(nome, sizeof(char), MAX_NOME, arquivo);
-    fwrite(nota1, sizeof(char), MAX_NOTA, arquivo);
-    fwrite(nota2, sizeof(char), MAX_NOTA, arquivo);
-    fwrite(nota3, sizeof(char), MAX_NOTA, arquivo);
+    fwrite(matricula, sizeof(char), MAX_MATRICULA, arquivoAluno);
+    fwrite(nome, sizeof(char), MAX_NOME, arquivoAluno);
+    fwrite(nota1, sizeof(char), MAX_NOTA, arquivoAluno);
+    fwrite(nota2, sizeof(char), MAX_NOTA, arquivoAluno);
+    fwrite(nota3, sizeof(char), MAX_NOTA, arquivoAluno);
 
     printf("Registro inserido com sucesso");
 
-    fclose(arquivo);
+    fclose(arquivoAluno);
 }
 
-void inserirRegistroFuncionario(FILE *arquivo) {
-    if (arquivo == NULL) {
+void inserirRegistroFuncionario(FILE *arquivoFuncionario) {
+    if (arquivoFuncionario == NULL) {
         printf("Erro ao abrir o arquivo.\n");
         return;
     }
     char id[MAX_ID];
-    char nome[MAX_NOME];
+    char nome[MAX_NOME_FUNCIONARIO];
     char cargo[MAX_CARGO];
     char disciplina[MAX_DISCIPLINA];
     char carga_horaria[MAX_CARGA_HORARIA];
@@ -187,28 +187,28 @@ void inserirRegistroFuncionario(FILE *arquivo) {
     printf("Digite seu nome (até 30 caracteres): ");
     scanf("%s", nome);
 
-    printf("Digite seu cargo (até 5 caracteres): ");
-    scanf("%5s", cargo);
+    printf("Digite seu cargo (até 21 caracteres): ");
+    scanf("%s", cargo);
 
-    printf("Digite sua disciplina (até 5 caracteres): ");
-    scanf("%5s", disciplina);
+    printf("Digite sua disciplina (até 21 caracteres): ");
+    scanf("%s", disciplina);
 
     printf("Digite sua carga horária (até 5 caracteres): ");
-    scanf("%5s", carga_horaria);
+    scanf("%s", carga_horaria);
 
-    fwrite(id, sizeof(char), MAX_ID, arquivo);
-    fwrite(nome, sizeof(char), MAX_NOME, arquivo);
-    fwrite(cargo, sizeof(char), MAX_CARGO, arquivo);
-    fwrite(disciplina, sizeof(char), MAX_DISCIPLINA, arquivo);
-    fwrite(carga_horaria, sizeof(char), MAX_CARGA_HORARIA, arquivo);
+    fwrite(id, sizeof(char), MAX_ID, arquivoFuncionario);
+    fwrite(nome, sizeof(char), MAX_NOME_FUNCIONARIO, arquivoFuncionario);
+    fwrite(cargo, sizeof(char), MAX_CARGO, arquivoFuncionario);
+    fwrite(disciplina, sizeof(char), MAX_DISCIPLINA, arquivoFuncionario);
+    fwrite(carga_horaria, sizeof(char), MAX_CARGA_HORARIA, arquivoFuncionario);
 
     printf("Registro inserido com sucesso");
 
-    fclose(arquivo);
+    fclose(arquivoFuncionario);
 }
 
-void inserirRegistroDisciplina(FILE *arquivo) {
-    if (arquivo == NULL) {
+void inserirRegistroDisciplina(FILE *arquivoDisciplina) {
+    if (arquivoDisciplina == NULL) {
         printf("Erro ao abrir o arquivo.\n");
         return;
     }
@@ -222,25 +222,25 @@ void inserirRegistroDisciplina(FILE *arquivo) {
     printf("Digite o nome do professor (até 30 caracteres): ");
     scanf("%s", professor);
 
-    printf("Digite os dias da semana (até 5 caracteres): ");
-    scanf("%5s", diadasemana);
+    printf("Digite os dias da semana (até 31 caracteres): ");
+    scanf("%s", diadasemana);
 
-    fwrite(semestre, sizeof(char), MAX_SEMESTRE, arquivo);
-    fwrite(professor, sizeof(char), MAX_PROFESSOR, arquivo);
-    fwrite(diadasemana, sizeof(char), MAX_DIADASEMANA, arquivo);
+    fwrite(semestre, sizeof(char), MAX_SEMESTRE, arquivoDisciplina);
+    fwrite(professor, sizeof(char), MAX_PROFESSOR, arquivoDisciplina);
+    fwrite(diadasemana, sizeof(char), MAX_DIADASEMANA, arquivoDisciplina);
 
     printf("Registro inserido com sucesso");
 
-    fclose(arquivo);
+    fclose(arquivoDisciplina);
 }
 
-void apagarRegistroAluno(FILE *arquivo, const char *matricula) {
+void apagarRegistroAluno(FILE *arquivoAluno, const char *matricula) {
     // Cria um arquivo temporário chamado temp para armazenar as informações,
     // se estiver vazio ele irá mostrar o texto abaixo!
     FILE *temp = fopen("temp.txt", "wb");
     if (temp == NULL) {
         printf("Erro ao criar o arquivo temporário.\n");
-        fclose(arquivo);
+        fclose(arquivoAluno);
         return;
     }
 
@@ -254,12 +254,12 @@ void apagarRegistroAluno(FILE *arquivo, const char *matricula) {
     // as strings com o strcmp (stringcompare). Dessa forma ele pode ver as
     // matrículas já registradas e apaga-las se for pedido para executar tal ação.
     // É necessário citar o número da matrícula que deseja excluir!
-    while (fread(regMatricula, sizeof(char), MAX_MATRICULA, arquivo) ==
+    while (fread(regMatricula, sizeof(char), MAX_MATRICULA, arquivoAluno) ==
             MAX_MATRICULA) {
-        fread(regNome, sizeof(char), MAX_NOME, arquivo);
-        fread(regNota1, sizeof(char), MAX_NOTA, arquivo);
-        fread(regNota2, sizeof(char), MAX_NOTA, arquivo);
-        fread(regNota3, sizeof(char), MAX_NOTA, arquivo);
+        fread(regNome, sizeof(char), MAX_NOME, arquivoAluno);
+        fread(regNota1, sizeof(char), MAX_NOTA, arquivoAluno);
+        fread(regNota2, sizeof(char), MAX_NOTA, arquivoAluno);
+        fread(regNota3, sizeof(char), MAX_NOTA, arquivoAluno);
 
         if (strcmp(regMatricula, matricula) != 0) {
             fwrite(regMatricula, sizeof(char), MAX_MATRICULA, temp);
@@ -270,63 +270,63 @@ void apagarRegistroAluno(FILE *arquivo, const char *matricula) {
         }
     }
 
-    fclose(arquivo);
+    fclose(arquivoAluno);
     fclose(temp);
 
-    remove("dados.txt");
-    rename("temp.txt", "dados.txt");
+    remove("dadosAluno.txt");
+    rename("temp.txt", "dadosAluno.txt");
 
     printf("Registro apagado com sucesso!\n");
 }
 
-void apagarRegistroFuncionario(FILE *arquivo, const char *id) {
+void apagarRegistroFuncionario(FILE *arquivoFuncionario, const char *id) {
     // Cria um arquivo temporário chamado temp para armazenar as informações,
     // se estiver vazio ele irá mostrar o texto abaixo!
     FILE *temp = fopen("temp.txt", "wb");
     if (temp == NULL) {
         printf("Erro ao criar o arquivo temporário.\n");
-        fclose(arquivo);
+        fclose(arquivoFuncionario);
         return;
     }
 
     char regID[MAX_ID];
-    char regNome[MAX_NOME];
+    char regNome[MAX_NOME_FUNCIONARIO];
     char regCargo[MAX_CARGO];
     char regDisciplina[MAX_DISCIPLINA];
     char regCargaHoraria[MAX_CARGA_HORARIA];
 
-    while (fread(regID, sizeof(char), MAX_ID, arquivo) ==
+    while (fread(regID, sizeof(char), MAX_ID, arquivoFuncionario) ==
             MAX_ID) {
-        fread(regNome, sizeof(char), MAX_NOME, arquivo);
-        fread(regCargo, sizeof(char), MAX_CARGO, arquivo);
-        fread(regDisciplina, sizeof(char), MAX_DISCIPLINA, arquivo);
-        fread(regCargaHoraria, sizeof(char), MAX_CARGA_HORARIA, arquivo);
+        fread(regNome, sizeof(char), MAX_NOME_FUNCIONARIO, arquivoFuncionario);
+        fread(regCargo, sizeof(char), MAX_CARGO, arquivoFuncionario);
+        fread(regDisciplina, sizeof(char), MAX_DISCIPLINA, arquivoFuncionario);
+        fread(regCargaHoraria, sizeof(char), MAX_CARGA_HORARIA, arquivoFuncionario);
 
         if (strcmp(regID, id) != 0) {
             fwrite(regID, sizeof(char), MAX_ID, temp);
-            fwrite(regNome, sizeof(char), MAX_NOME, temp);
+            fwrite(regNome, sizeof(char), MAX_NOME_FUNCIONARIO, temp);
             fwrite(regCargo, sizeof(char), MAX_CARGO, temp);
             fwrite(regDisciplina, sizeof(char), MAX_DISCIPLINA, temp);
             fwrite(regCargaHoraria, sizeof(char), MAX_CARGA_HORARIA, temp);
         }
     }
 
-    fclose(arquivo);
+    fclose(arquivoFuncionario);
     fclose(temp);
 
-    remove("dados.txt");
-    rename("temp.txt", "dados.txt");
+    remove("dadosFuncionario.txt");
+    rename("temp.txt", "dadosFuncionario.txt");
 
     printf("Registro apagado com sucesso!\n");
 }
 
-void apagarRegistroDisciplina(FILE *arquivo, const char *semestre) {
+void apagarRegistroDisciplina(FILE *arquivoDisciplina, const char *semestre) {
     // Cria um arquivo temporário chamado temp para armazenar as informações,
     // se estiver vazio ele irá mostrar o texto abaixo!
     FILE *temp = fopen("temp.txt", "wb");
     if (temp == NULL) {
         printf("Erro ao criar o arquivo temporário.\n");
-        fclose(arquivo);
+        fclose(arquivoDisciplina);
         return;
     }
 
@@ -334,10 +334,10 @@ void apagarRegistroDisciplina(FILE *arquivo, const char *semestre) {
     char regProfessor[MAX_PROFESSOR];
     char regDiaDaSemana[MAX_DIADASEMANA];
 
-    while (fread(regSemestre, sizeof(char), MAX_SEMESTRE, arquivo) ==
+    while (fread(regSemestre, sizeof(char), MAX_SEMESTRE, arquivoDisciplina) ==
             MAX_SEMESTRE) {
-        fread(regProfessor, sizeof(char), MAX_PROFESSOR, arquivo);
-        fread(regDiaDaSemana, sizeof(char), MAX_DIADASEMANA, arquivo);
+        fread(regProfessor, sizeof(char), MAX_PROFESSOR, arquivoDisciplina);
+        fread(regDiaDaSemana, sizeof(char), MAX_DIADASEMANA, arquivoDisciplina);
 
         if (strcmp(regSemestre, semestre) != 0) {
             fwrite(regSemestre, sizeof(char), MAX_SEMESTRE, temp);
@@ -346,18 +346,28 @@ void apagarRegistroDisciplina(FILE *arquivo, const char *semestre) {
         }
     }
 
-    fclose(arquivo);
+    fclose(arquivoDisciplina);
     fclose(temp);
 
-    remove("dados.txt");
-    rename("temp.txt", "dados.txt");
+    remove("dadosDisciplina.txt");
+    rename("temp.txt", "dadosDisciplina.txt");
 
     printf("Registro apagado com sucesso!\n");
 }
 
 int main() {
-    FILE *arquivo = fopen("dados.txt", "ab+");
-    if (arquivo == NULL) {
+    FILE *arquivoAluno = fopen("dadosAluno.txt", "ab+");
+    if (arquivoAluno == NULL) {
+        printf("Erro ao abrir o arquivo\n");
+        return 1;
+    }
+    FILE *arquivoFuncionario = fopen("dadosFuncionario.txt", "ab+");
+    if (arquivoFuncionario == NULL) {
+        printf("Erro ao abrir o arquivo\n");
+        return 1;
+    }
+    FILE *arquivoDisciplina = fopen("dadosDisciplina.txt", "ab+");
+    if (arquivoDisciplina == NULL) {
         printf("Erro ao abrir o arquivo\n");
         return 1;
     }
@@ -388,43 +398,45 @@ int main() {
 
     // Imprimir
     if (opcao == 1) {
-        imprimirRegistrosArquivoAluno("dados.txt");
+        imprimirRegistrosArquivoAluno("dadosAluno.txt");
     } else if (opcao == 2) {
-        imprimirRegistrosArquivoFuncionario("dados.txt");
+        imprimirRegistrosArquivoFuncionario("dadosFuncionario.txt");
     } else if (opcao == 3) {
-        imprimirRegistrosArquivoDisciplina("dados.txt");
+        imprimirRegistrosArquivoDisciplina("dadosDisciplina.txt");
     }
 
     // Inserir
     else if (opcao == 4) {
-        inserirRegistroAluno(arquivo);
+        inserirRegistroAluno(arquivoAluno);
     }
     else if (opcao == 5) {
-        inserirRegistroFuncionario(arquivo);
+        inserirRegistroFuncionario(arquivoFuncionario);
     }
     else if (opcao == 6) {
-        inserirRegistroDisciplina(arquivo);
+        inserirRegistroDisciplina(arquivoDisciplina);
     }
 
     // Apagar
     else if (opcao == 7) {
         printf("Digite a matrícula do registro a ser apagado: ");
         scanf("%5s", matricula);
-        apagarRegistroAluno(arquivo, matricula);
+        apagarRegistroAluno(arquivoAluno, matricula);
     }
     else if (opcao == 8) {
         printf("Digite o ID a ser apagado: ");
         scanf("%5s", id);
-        apagarRegistroFuncionario(arquivo, id);
+        apagarRegistroFuncionario(arquivoFuncionario, id);
     }
     else if (opcao == 9) {
-        printf("Digite a disciplina a ser apagada: ");
+        printf("Digite o semestre a ser apagado: ");
         scanf("%5s", semestre);
-        apagarRegistroDisciplina(arquivo, semestre);
+        apagarRegistroDisciplina(arquivoDisciplina, semestre);
     } else {
         printf("Opção inválida, encerrando processo...\n");
     }
 
-    fclose(arquivo);
+    fclose(arquivoAluno);
+    fclose(arquivoFuncionario);
+    fclose(arquivoDisciplina);
     return 0;
 }
