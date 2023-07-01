@@ -236,7 +236,7 @@ void inserirRegistroDisciplina(FILE *arquivo) {
 
 void apagarRegistroAluno(FILE *arquivo, const char *matricula) {
     // Cria um arquivo temporário chamado temp para armazenar as informações,
-    // seestiver vazio ele irá mostrar o texto abaixo!
+    // se estiver vazio ele irá mostrar o texto abaixo!
     FILE *temp = fopen("temp.txt", "wb");
     if (temp == NULL) {
         printf("Erro ao criar o arquivo temporário.\n");
@@ -279,7 +279,7 @@ void apagarRegistroAluno(FILE *arquivo, const char *matricula) {
     printf("Registro apagado com sucesso!\n");
 }
 
-void apagarRegistroFuncionario(FILE *arquivo, const char *matricula) {
+void apagarRegistroFuncionario(FILE *arquivo, const char *id) {
     // Cria um arquivo temporário chamado temp para armazenar as informações,
     // se estiver vazio ele irá mostrar o texto abaixo!
     FILE *temp = fopen("temp.txt", "wb");
@@ -289,25 +289,25 @@ void apagarRegistroFuncionario(FILE *arquivo, const char *matricula) {
         return;
     }
 
-    char regMatricula[MAX_MATRICULA];
+    char regID[MAX_ID];
     char regNome[MAX_NOME];
-    char regNota1[MAX_NOTA];
-    char regNota2[MAX_NOTA];
-    char regNota3[MAX_NOTA];
+    char regCargo[MAX_CARGO];
+    char regDisciplina[MAX_DISCIPLINA];
+    char regCargaHoraria[MAX_CARGA_HORARIA];
 
-    while (fread(regMatricula, sizeof(char), MAX_MATRICULA, arquivo) ==
-            MAX_MATRICULA) {
+    while (fread(regID, sizeof(char), MAX_ID, arquivo) ==
+            MAX_ID) {
         fread(regNome, sizeof(char), MAX_NOME, arquivo);
-        fread(regNota1, sizeof(char), MAX_NOTA, arquivo);
-        fread(regNota2, sizeof(char), MAX_NOTA, arquivo);
-        fread(regNota3, sizeof(char), MAX_NOTA, arquivo);
+        fread(regCargo, sizeof(char), MAX_CARGO, arquivo);
+        fread(regDisciplina, sizeof(char), MAX_DISCIPLINA, arquivo);
+        fread(regCargaHoraria, sizeof(char), MAX_CARGA_HORARIA, arquivo);
 
-        if (strcmp(regMatricula, matricula) != 0) {
-            fwrite(regMatricula, sizeof(char), MAX_MATRICULA, temp);
+        if (strcmp(regID, id) != 0) {
+            fwrite(regID, sizeof(char), MAX_ID, temp);
             fwrite(regNome, sizeof(char), MAX_NOME, temp);
-            fwrite(regNota1, sizeof(char), MAX_NOTA, temp);
-            fwrite(regNota2, sizeof(char), MAX_NOTA, temp);
-            fwrite(regNota3, sizeof(char), MAX_NOTA, temp);
+            fwrite(regCargo, sizeof(char), MAX_CARGO, temp);
+            fwrite(regDisciplina, sizeof(char), MAX_DISCIPLINA, temp);
+            fwrite(regCargaHoraria, sizeof(char), MAX_CARGA_HORARIA, temp);
         }
     }
 
@@ -320,7 +320,7 @@ void apagarRegistroFuncionario(FILE *arquivo, const char *matricula) {
     printf("Registro apagado com sucesso!\n");
 }
 
-void apagarRegistroDisciplina(FILE *arquivo, const char *matricula) {
+void apagarRegistroDisciplina(FILE *arquivo, const char *semestre) {
     // Cria um arquivo temporário chamado temp para armazenar as informações,
     // se estiver vazio ele irá mostrar o texto abaixo!
     FILE *temp = fopen("temp.txt", "wb");
@@ -330,25 +330,19 @@ void apagarRegistroDisciplina(FILE *arquivo, const char *matricula) {
         return;
     }
 
-    char regMatricula[MAX_MATRICULA];
-    char regNome[MAX_NOME];
-    char regNota1[MAX_NOTA];
-    char regNota2[MAX_NOTA];
-    char regNota3[MAX_NOTA];
+    char regSemestre[MAX_SEMESTRE];
+    char regProfessor[MAX_PROFESSOR];
+    char regDiaDaSemana[MAX_DIADASEMANA];
 
-    while (fread(regMatricula, sizeof(char), MAX_MATRICULA, arquivo) ==
-            MAX_MATRICULA) {
-        fread(regNome, sizeof(char), MAX_NOME, arquivo);
-        fread(regNota1, sizeof(char), MAX_NOTA, arquivo);
-        fread(regNota2, sizeof(char), MAX_NOTA, arquivo);
-        fread(regNota3, sizeof(char), MAX_NOTA, arquivo);
+    while (fread(regSemestre, sizeof(char), MAX_SEMESTRE, arquivo) ==
+            MAX_SEMESTRE) {
+        fread(regProfessor, sizeof(char), MAX_PROFESSOR, arquivo);
+        fread(regDiaDaSemana, sizeof(char), MAX_DIADASEMANA, arquivo);
 
-        if (strcmp(regMatricula, matricula) != 0) {
-            fwrite(regMatricula, sizeof(char), MAX_MATRICULA, temp);
-            fwrite(regNome, sizeof(char), MAX_NOME, temp);
-            fwrite(regNota1, sizeof(char), MAX_NOTA, temp);
-            fwrite(regNota2, sizeof(char), MAX_NOTA, temp);
-            fwrite(regNota3, sizeof(char), MAX_NOTA, temp);
+        if (strcmp(regSemestre, semestre) != 0) {
+            fwrite(regSemestre, sizeof(char), MAX_SEMESTRE, temp);
+            fwrite(regProfessor, sizeof(char), MAX_PROFESSOR, temp);
+            fwrite(regDiaDaSemana, sizeof(char), MAX_DIADASEMANA, temp);
         }
     }
 
